@@ -14,15 +14,17 @@ func FindUsers(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context) {
-	var input models.CreateUserInput
+	var input models.User
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user := models.User{ID: input.ID, Username: input.Username, Email: input.Email}
-	models.DB.Create(&user)
+	if err := models.DB.Create(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{"data": user})
+	c.JSON(http.StatusOK, gin.H{"data": input})
 }
