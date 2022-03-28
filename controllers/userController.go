@@ -46,10 +46,10 @@ func (c *userController) Update(ctx *gin.Context) error {
 	if err != nil {
 		return err
 	}
-	
 	user_id := ctx.Param("id")
+	user.ID = user_id
 	c.service.Update(user)
-	return ni
+	return nil
 }
 
 
