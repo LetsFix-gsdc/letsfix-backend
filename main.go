@@ -2,20 +2,23 @@ package main
 
 import (
 	"gsdc/letsfix/controllers"
-	"gsdc/letsfix/models"
+	//"gsdc/letsfix/models"
+	"gsdc/letsfix/repository"
 	"gsdc/letsfix/service"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 var (
-	userService service.UserService = service.New()
+	userRepository repository.UserRepository = repository.NewUserRepository()
+	userService service.UserService = service.New(userRepository)
 	userController controllers.UserController = controllers.New(userService)
 )
 
 func main() {
 	r := gin.Default()
-	models.ConnectDatabase()
+	//models.ConnectDatabase()
 	
 	/*
 	r.GET("/users", controllers.FindUsers)
@@ -25,11 +28,25 @@ func main() {
 
 	
 	r.GET("/users", func(ctx *gin.Context) {
-		ctx.JSON(200, userController.FindAll())
+		ctx.JSON(http.StatusOK, userController.FindAll())
 	})
 
 	r.POST("/users", func(ctx *gin.Context) {
-		ctx.JSON(200, userController.Save(ctx))
+		err := userController.Save(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
+
+	r.PUT("/users/:id", func(ctx *gin.Context) {
+		err := userController.Update(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Update is Valid!"})
+		}
 	})
 	
 	
