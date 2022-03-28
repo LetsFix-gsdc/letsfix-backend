@@ -28,6 +28,9 @@ func ConnectDatabase() {
 	}
 
 	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Ownership{})
 
 	DB = db
 }
+
+
