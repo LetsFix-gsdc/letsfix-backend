@@ -52,6 +52,14 @@ func (c *userController) Update(ctx *gin.Context) error {
 	return nil
 }
 
+func (c *userController) Delete(ctx *gin.Context) {
+	var user models.User
+	user_id := ctx.Param("id")
+	user.ID = user_id
+	c.service.Update(user)
+	return nil
+
+}
 
 
 /*
