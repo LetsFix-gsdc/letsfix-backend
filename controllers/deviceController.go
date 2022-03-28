@@ -1,5 +1,5 @@
 package controllers
-
+/*
 import (
 	"gsdc/letsfix/models"
 	"net/http"
@@ -31,7 +31,7 @@ func CreateDevice(c *gin.Context) {
 
 	
 }
-
+*/
 
 
 

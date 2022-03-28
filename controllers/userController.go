@@ -3,7 +3,7 @@ package controllers
 import (
 	"gsdc/letsfix/models"
 	"gsdc/letsfix/service"
-	"net/http"
+	//"net/http"
 
 	"github.com/gin-gonic/gin"
 )
