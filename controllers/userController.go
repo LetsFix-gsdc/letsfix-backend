@@ -12,7 +12,7 @@ type UserController interface {
 	FindAll() []models.User
 	Save(ctx *gin.Context) error
 	Update(ctx *gin.Context) error
-	Delete(ctx *gin.Context)
+	Delete(ctx *gin.Context) error
 	
 }
 
@@ -52,11 +52,11 @@ func (c *userController) Update(ctx *gin.Context) error {
 	return nil
 }
 
-func (c *userController) Delete(ctx *gin.Context) {
+func (c *userController) Delete(ctx *gin.Context) error {
 	var user models.User
 	user_id := ctx.Param("id")
 	user.ID = user_id
-	c.service.Update(user)
+	c.service.Delete(user)
 	return nil
 
 }
