@@ -38,13 +38,13 @@ func NewUserRepository() UserRepository {
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
-	/*
+	
 	db.AutoMigrate(&models.User{}, &models.Ownership{}, 
 	&models.Device{}, &models.Type{}, 
 	&models.Brand{}, &models.Recycler_Type{},
 	&models.Repair_Type{}, &models.Recycler{},
-	&models.Repairer{})*/
-	db.AutoMigrate(&models.User{})
+	&models.Repairer{})
+	//db.AutoMigrate(&models.User{})
 
 	return &database {
 		connection: db,
