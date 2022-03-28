@@ -2,11 +2,67 @@ package controllers
 
 import (
 	"gsdc/letsfix/models"
+	"gsdc/letsfix/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+type UserController interface {
+	FindAll() []models.User
+	Save(ctx *gin.Context) error
+	Update(ctx *gin.Context) error
+	Delete(ctx *gin.Context)
+	
+}
+
+type userController struct {
+	service service.UserService
+}
+
+func New(service service.UserService) UserController{
+	return &userController {
+		service: service,
+	}
+}
+
+func (c *userController) FindAll() []models.User {
+	return c.service.FindAll() 
+}
+
+func (c *userController) Save(ctx *gin.Context) error {
+	var user models.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		return err
+	}
+	c.service.Save(user)
+	return nil
+}
+
+func (c *userController) Update(ctx *gin.Context) error {
+	var user models.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		return err
+	}
+	user_id := ctx.Param("id")
+	user.ID = user_id
+	c.service.Update(user)
+	return nil
+}
+
+func (c *userController) Delete(ctx *gin.Context) {
+	var user models.User
+	user_id := ctx.Param("id")
+	user.ID = user_id
+	c.service.Update(user)
+	return nil
+
+}
+
+
+/*
 func FindUsers(c *gin.Context) {
 	var users []models.User
 	models.DB.Find(&users)
@@ -28,3 +84,4 @@ func CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": input})
 }
+*/
