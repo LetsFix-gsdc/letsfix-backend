@@ -3,6 +3,8 @@ package service
 import (
 	"gsdc/letsfix/models"
 	"gsdc/letsfix/repository"
+
+	//"google.golang.org/grpc/channelz/service"
 )
 
 type UserService interface {
@@ -10,6 +12,7 @@ type UserService interface {
 	Update(models.User)
 	Delete(models.User)
 	FindAll() []models.User
+	FindByUserId(string) models.User
 }
 
 type userService struct {
@@ -37,4 +40,8 @@ func (service *userService) Update(user models.User) {
 
 func (service *userService) Delete(user models.User) {
 	service.userRepository.Delete(user)
+}
+
+func (service *userService) FindByUserId(user_id string) models.User {
+	return service.userRepository.FindByUserId(user_id)
 }

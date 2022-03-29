@@ -15,6 +15,7 @@ type UserRepository interface {
 	Update(models.User)
 	Delete(models.User)
 	FindAll() []models.User
+	FindByUserId(string) models.User
 	//CloseDB()
 }
 
@@ -86,4 +87,10 @@ func (db *database) FindAll() []models.User {
 		d.connection.Set("gorm:auto_preload", true).Find(&users)
 	*/
 	return users
+}
+
+func (db *database) FindByUserId(user_id string) models.User {
+	var user models.User
+	DB.Find(&user, user_id)
+	return user
 }
