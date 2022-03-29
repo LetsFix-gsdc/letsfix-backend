@@ -14,6 +14,10 @@ var (
 	userRepository repository.UserRepository = repository.NewUserRepository()
 	userService service.UserService = service.New(userRepository)
 	userController controllers.UserController = controllers.New(userService)
+
+	deviceRepository repository.DeviceRepository = repository.NewDeviceRepository()
+	deviceService service.DeviceService = service.NewDeviceService(deviceRepository)
+	deviceController controllers.DeviceController = controllers.NewDeviceController(deviceService)
 )
 
 func main() {
@@ -26,7 +30,7 @@ func main() {
 	r.GET("/users/:user_id/devices", controllers.FindDevices)
 	*/
 
-	
+	repository.DatabaseConnect()
 	r.GET("/users", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, userController.FindAll())
 	})
@@ -48,6 +52,12 @@ func main() {
 			ctx.JSON(http.StatusOK, gin.H{"message": "User Update is Valid!"})
 		}
 	})
+
+	r.GET("/devices", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, deviceController.FindAllDevices())
+	})
+
+	
 	
 	
 

@@ -1,9 +1,9 @@
-package models
-/*
+package repository
+
 import (
 	"fmt"
 	"gsdc/letsfix/util"
-
+	"gsdc/letsfix/models"
 	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDatabase() {
+func DatabaseConnect() {
 	config, err := util.LoadConfig("./.")
 	if err != nil {
 		panic("cannot load config: " + err.Error())
@@ -26,11 +26,12 @@ func ConnectDatabase() {
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
-
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Ownership{})
+	
+	db.AutoMigrate(&models.User{}, &models.Ownership{}, 
+	&models.Device{}, &models.Type{}, 
+	&models.Brand{}, &models.Recycler_Type{},
+	&models.Repair_Type{}, &models.Recycler{},
+	&models.Repairer{})
 
 	DB = db
 }
-*/
-
