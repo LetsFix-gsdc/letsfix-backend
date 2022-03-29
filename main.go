@@ -22,6 +22,10 @@ var (
 	ownershipRepository repository.OwnershipRepository = repository.NewOwnershipRepository()
 	ownershipService service.OwnershipService = service.NewOwnershipService(ownershipRepository)
 	ownershipController controllers.OwnershipController = controllers.NewOwnershipController(ownershipService)
+
+	typeRepository repository.TypeRepository = repository.NewTypeRepository()
+	typeService service.TypeService = service.NewTypeService(typeRepository)
+	typeController controllers.TypeController = controllers.NewTypeController(typeService)
 )
 
 func main() {
@@ -99,6 +103,24 @@ func main() {
 			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
 		}
 	})	
+
+	// Type CRUD
+	r.GET("/types", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, typeController.FindAllTypes())
+	})
+
+	r.GET("types/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, typeController.FindByTypeId(ctx))
+	})
+
+	r.POST("/types", func(ctx *gin.Context) {
+		err := typeController.SaveType(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
 
 	
 
