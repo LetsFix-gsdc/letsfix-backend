@@ -1,6 +1,5 @@
 package repository
 
-
 import (
 	"gsdc/letsfix/models"
 	//"fmt"
@@ -21,38 +20,37 @@ type DeviceRepository interface {
 	//CloseDB()
 }
 
-
 func NewDeviceRepository() DeviceRepository {
 	/*
-	config, err := util.LoadConfig("./.")
-	if err != nil {
-		panic("cannot load config: " + err.Error())
-	}
+		config, err := util.LoadConfig("./.")
+		if err != nil {
+			panic("cannot load config: " + err.Error())
+		}
 
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s sslmode=disable", config.DbHost, config.DbPort, config.DbUser, config.DbPassword)
+		dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s sslmode=disable", config.DbHost, config.DbPort, config.DbUser, config.DbPassword)
 
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN: dsn,
-	}))
+		db, err := gorm.Open(postgres.New(postgres.Config{
+			DSN: dsn,
+		}))
 
-	if err != nil {
-		panic("Failed to connect to database!")
-	}
-	
-	db.AutoMigrate(&models.User{}, &models.Ownership{}, 
-	&models.Device{}, &models.Type{}, 
-	&models.Brand{}, &models.Recycler_Type{},
-	&models.Repair_Type{}, &models.Recycler{},
-	&models.Repairer{})
-	//db.AutoMigrate(&models.User{})
+		if err != nil {
+			panic("Failed to connect to database!")
+		}
 
-	return &database {
-		connection: db,
-	}
+		db.AutoMigrate(&models.User{}, &models.Ownership{},
+		&models.Device{}, &models.Type{},
+		&models.Brand{}, &models.Recycler_Type{},
+		&models.Repair_Type{}, &models.Recycler{},
+		&models.Repairer{})
+		//db.AutoMigrate(&models.User{})
+
+		return &database {
+			connection: db,
+		}
 	*/
 	//DB = db
 
-	return &database {
+	return &database{
 		connection: DB,
 	}
 }
@@ -67,31 +65,29 @@ func (db *database) CloseDB() {
 */
 
 func (db *database) SaveDevice(device models.Device) {
-	db.connection.Create(&device)
+	DB.Create(&device)
 }
 
 func (db *database) UpdateDevice(device models.Device) {
-	db.connection.Save(&device)
+	DB.Save(&device)
 }
 
 func (db *database) DeleteDevice(device models.Device) {
-	db.connection.Delete(&device)
+	DB.Delete(&device)
 }
 
 func (db *database) FindAllDevices() []models.Device {
 	var devices []models.Device
 	//db.connection.Find(&device)
-	
+
 	//for tables with foreign keys,
-	db.connection.Set("gorm:auto_preload", true).Find(&devices)
-	
+	DB.Set("gorm:auto_preload", true).Find(&devices)
+
 	return devices
 }
 
 func (db *database) FindDeviceById(device_id uint) models.Device {
 	var device models.Device
-	db.connection.Set("gorm:auto_preload", true).Find(&device, device_id)
+	DB.Set("gorm:auto_preload", true).Find(&device, device_id)
 	return device
 }
-
-
