@@ -1,63 +1,87 @@
 package controllers
-/*
+
 import (
+	"fmt"
 	"gsdc/letsfix/models"
-	"net/http"
+	"gsdc/letsfix/service"
+	"strconv"
+
+	//"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// welcome?firstname=Jane&lastname=Doe
-// /users/:user_id/devices
-func FindDevices(c *gin.Context) {
-	var devices []models.Device
-	var users []models.Ownership
-
-	user_id := c.Param("user_id")
-
-	models.DB.Find(&users)
-	for i := 0; i < len(users); i++ {
-		if id := users[i].Owner.ID; id == user_id {
-			devices = append(devices, users[i].Device)
-		} 
-	}
-	c.JSON(http.StatusOK, gin.H{"data": devices})
-
-}
-
-// /users/:user_id/devices
-func CreateDevice(c *gin.Context) {
-	var input models.Device
-
+type DeviceController interface {
+	FindAllDevices() []models.Device
+	SaveDevice(ctx *gin.Context) error
+	UpdateDevice(ctx *gin.Context) error
+	DeleteDevice(ctx *gin.Context) error
+	FindDevice(ctx *gin.Context) error
 	
 }
-*/
 
-
-
-
-
-/*
-func FindUsers(c *gin.Context) {
-	var users []models.User
-	models.DB.Find(&users)
-	c.JSON(http.StatusOK, gin.H{"data": users})
+type deviceController struct {
+	service service.DeviceService
 }
 
-func CreateUser(c *gin.Context) {
-	var input models.User
-
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+func NewDeviceController(service service.DeviceService) DeviceController{
+	return &deviceController {
+		service: service,
 	}
-
-	if err := models.DB.Create(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": input})
 }
 
-*/
+func (c *deviceController) FindAllDevices() []models.Device {
+	return c.service.FindAllDevices() 
+}
+
+func (c *deviceController) SaveDevice(ctx *gin.Context) error {
+	var device models.Device
+	err := ctx.ShouldBindJSON(&device)
+	if err != nil {
+		return err
+	}
+	c.service.SaveDevice(device)
+	return nil
+}
+
+func (c *deviceController) UpdateDevice(ctx *gin.Context) error {
+	var device models.Device
+	err := ctx.ShouldBindJSON(&device)
+	if err != nil {
+		return err
+	}
+	p := ctx.Param("id")
+	device_id, err := strconv.ParseUint(p, 10, 32)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	device.ID = uint(device_id)
+	c.service.UpdateDevice(device)
+	return nil
+}
+
+func (c *deviceController) DeleteDevice(ctx *gin.Context) error {
+	var device models.Device
+	p := ctx.Param("id")
+	device_id, err := strconv.ParseUint(p, 10, 32)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	device.ID = uint(device_id)
+	c.service.DeleteDevice(device)
+	return nil
+
+}
+
+func (c *deviceController) FindDevice(ctx *gin.Context) error {
+	p := ctx.Param("id")
+	id, err := strconv.ParseUint(p, 10, 32)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	device_id := uint(id)
+	c.service.FindDevice(device_id)
+	return nil
+}
+
+

@@ -3,12 +3,12 @@ package repository
 
 import (
 	"gsdc/letsfix/models"
-	"fmt"
-	"gsdc/letsfix/util"
+	//"fmt"
+	//"gsdc/letsfix/util"
 
 	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	//"gorm.io/driver/postgres"
+	//"gorm.io/gorm"
 )
 
 type DeviceRepository interface {
@@ -17,16 +17,13 @@ type DeviceRepository interface {
 	DeleteDevice(models.Device)
 	FindAllDevices() []models.Device
 	//FindDeviceByUserId()
-	FindDeviceById(uint)
+	FindDeviceById(uint) models.Device
 	//CloseDB()
 }
 
-type database struct {
-	connection *gorm.DB
-}
 
 func NewDeviceRepository() DeviceRepository {
-
+	/*
 	config, err := util.LoadConfig("./.")
 	if err != nil {
 		panic("cannot load config: " + err.Error())
@@ -52,8 +49,12 @@ func NewDeviceRepository() DeviceRepository {
 	return &database {
 		connection: db,
 	}
-
+	*/
 	//DB = db
+
+	return &database {
+		connection: DB,
+	}
 }
 
 /*
@@ -87,8 +88,10 @@ func (db *database) FindAllDevices() []models.Device {
 	return devices
 }
 
-func () FindDeviceById(device_id uint) models.Device {
-	
+func (db *database) FindDeviceById(device_id uint) models.Device {
+	var device models.Device
+	db.connection.Set("gorm:auto_preload", true).Find(&device, device_id)
+	return device
 }
 
 

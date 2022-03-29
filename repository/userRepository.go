@@ -2,12 +2,12 @@ package repository
 
 import (
 	"gsdc/letsfix/models"
-	"fmt"
-	"gsdc/letsfix/util"
+	//"fmt"
+	//"gsdc/letsfix/util"
 
 	_ "github.com/GoogleCloudPlatform/cloudsql-proxy/proxy/dialers/postgres"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	//"gorm.io/driver/postgres"
+	//"gorm.io/gorm"
 )
 
 type UserRepository interface {
@@ -17,13 +17,13 @@ type UserRepository interface {
 	FindAll() []models.User
 	//CloseDB()
 }
-
+/*
 type database struct {
 	connection *gorm.DB
 }
-
+*/
 func NewUserRepository() UserRepository {
-
+	/*
 	config, err := util.LoadConfig("./.")
 	if err != nil {
 		panic("cannot load config: " + err.Error())
@@ -49,8 +49,11 @@ func NewUserRepository() UserRepository {
 	return &database {
 		connection: db,
 	}
-
+	*/
 	//DB = db
+	return &database {
+		connection: DB,
+	}
 }
 /*
 func (db *database) CloseDB() {
