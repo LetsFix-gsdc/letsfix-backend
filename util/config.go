@@ -17,9 +17,16 @@ func LoadConfig(path string) (config Config, err error) {
 	viper.SetConfigName("config")
 	viper.SetConfigType("env")
 
+	viper.AutomaticEnv()
+	viper.BindEnv("DB_HOST")
+	viper.BindEnv("DB_PORT")
+	viper.BindEnv("DB_USER")
+	viper.BindEnv("DB_PASSWORD")
+
 	err = viper.ReadInConfig()
 	if err != nil {
-		return
+		//os.Environ().
+		//return
 	}
 
 	err = viper.Unmarshal(&config)
