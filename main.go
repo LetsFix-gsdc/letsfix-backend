@@ -26,6 +26,10 @@ var (
 	typeRepository repository.TypeRepository = repository.NewTypeRepository()
 	typeService service.TypeService = service.NewTypeService(typeRepository)
 	typeController controllers.TypeController = controllers.NewTypeController(typeService)
+
+	brandRepository repository.BrandRepository = repository.NewBrandRepository()
+	brandService service.BrandService = service.NewBrandService(brandRepository)
+	brandController controllers.BrandController = controllers.NewBrandController(brandService)
 )
 
 func main() {
@@ -115,6 +119,24 @@ func main() {
 
 	r.POST("/types", func(ctx *gin.Context) {
 		err := typeController.SaveType(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
+
+	// Brand CRUD
+	r.GET("/brands", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, brandController.FindAllBrands())
+	})
+
+	r.GET("brands/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, brandController.FindByBrandId(ctx))
+	})
+
+	r.POST("/brands", func(ctx *gin.Context) {
+		err := brandController.SaveBrand(ctx)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		} else {
