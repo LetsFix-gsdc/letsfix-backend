@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"gsdc/letsfix/models"
 	"gsdc/letsfix/service"
+
 	//"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +15,7 @@ type UserController interface {
 	Save(ctx *gin.Context) error
 	Update(ctx *gin.Context) error
 	Delete(ctx *gin.Context) error
+	FindByUserId(ctx *gin.Context) models.User
 	
 }
 
@@ -59,6 +62,12 @@ func (c *userController) Delete(ctx *gin.Context) error {
 	c.service.Delete(user)
 	return nil
 
+}
+
+func (c *userController) FindByUserId(ctx *gin.Context) models.User {
+	user_id := ctx.Param("id")
+	fmt.Println(user_id)
+	return c.service.FindByUserId(user_id)
 }
 
 

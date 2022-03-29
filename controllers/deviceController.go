@@ -16,7 +16,7 @@ type DeviceController interface {
 	SaveDevice(ctx *gin.Context) error
 	UpdateDevice(ctx *gin.Context) error
 	DeleteDevice(ctx *gin.Context) error
-	FindDevice(ctx *gin.Context) error
+	FindDevice(ctx *gin.Context) models.Device
 	
 }
 
@@ -73,15 +73,14 @@ func (c *deviceController) DeleteDevice(ctx *gin.Context) error {
 
 }
 
-func (c *deviceController) FindDevice(ctx *gin.Context) error {
+func (c *deviceController) FindDevice(ctx *gin.Context) models.Device {
 	p := ctx.Param("id")
 	id, err := strconv.ParseUint(p, 10, 32)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	device_id := uint(id)
-	c.service.FindDevice(device_id)
-	return nil
+	return c.service.FindDevice(device_id)
 }
 
 
