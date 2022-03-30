@@ -6,6 +6,8 @@ require gorm.io/driver/postgres v1.3.1
 
 require (
 	cloud.google.com/go/compute v1.3.0 // indirect
+	github.com/antchfx/xmlquery v1.3.10 // indirect
+	github.com/antchfx/xpath v1.2.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
