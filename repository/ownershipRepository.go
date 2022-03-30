@@ -44,7 +44,7 @@ func (db *database) FindOwnershipByUserId(user_id string) models.Ownership {
 func (db *database) FindDevicesByUserId(user_id string) []models.Device {
 	var owner models.Ownership
 	var device []models.Device
-	DB.Set("gorm:auto_preload", true).Find(&owner, user_id)
-	DB.Set("gorm:auto_preload", true).Find(&device, owner.ID)
+	DB.Set("gorm:auto_preload", true).Find(&owner, "id=?", user_id)
+	DB.Set("gorm:auto_preload", true).Find(&device, "id=?", owner.ID)
 	return device
 }

@@ -91,6 +91,6 @@ func (db *database) FindAll() []models.User {
 
 func (db *database) FindByUserId(user_id string) models.User {
 	var user models.User
-	DB.Find(&user, user_id)
+	DB.Find(&user, "id=?", user_id)
 	return user
 }

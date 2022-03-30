@@ -36,6 +36,6 @@ func (db *database) FindAllTypes() []models.Type {
 
 func (db *database) FindByTypeId(type_id uint) models.Type {
 	var t models.Type
-	DB.Find(&t, type_id)
+	DB.Find(&t, "id=?", type_id)
 	return t
 }

@@ -36,6 +36,6 @@ func (db *database) FindAllBrands() []models.Brand {
 
 func (db *database) FindByBrandId(brand_id uint) models.Brand {
 	var b models.Brand
-	DB.Find(&b, brand_id)
+	DB.Find(&b, "id=?", brand_id)
 	return b
 }
