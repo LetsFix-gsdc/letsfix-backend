@@ -4,13 +4,10 @@ import "gsdc/letsfix/models"
 
 type RctypeRepository interface {
 	SaveRctype(models.Recycler_Type)
-	//UpdateOwnership(models.Ownership)
-	//DeleteOwnership(models.Ownership)
 	FindAllRctypes() []models.Recycler_Type
-	//FindDeviceByUserId()
 	FindRctypeById(uint) models.Recycler_Type
 	FindRctypeByType(string) []models.Recycler_Type
-	//CloseDB()
+
 }
 
 
@@ -27,7 +24,7 @@ func (db *database) SaveRctype(r models.Recycler_Type) {
 func (db *database) FindAllRctypes() []models.Recycler_Type {
 
 	var r []models.Recycler_Type
-	DB.Find(&r)
+	DB.Set("gorm:auto_preload", true).Find(&r)
 	/*
 		for tables with foreign keys,
 		d.connection.Set("gorm:auto_preload", true).Find(&users)
