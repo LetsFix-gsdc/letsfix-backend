@@ -88,6 +88,6 @@ func (db *database) FindAllDevices() []models.Device {
 
 func (db *database) FindDeviceById(device_id uint) models.Device {
 	var device models.Device
-	DB.Set("gorm:auto_preload", true).Find(&device, device_id)
+	DB.Set("gorm:auto_preload", true).Find(&device, "id=?", device_id)
 	return device
 }
