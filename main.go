@@ -59,7 +59,7 @@ func main() {
 
 	repository.DatabaseConnect()
 
-	if os.Args[1] == "seed" {
+	if len(os.Args) > 1 && os.Args[1] == "seed" {
 		seed.SeedFromXml("recycler-data.kml")
 	}
 
@@ -174,6 +174,10 @@ func main() {
 
 	r.GET("/recyclers/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, recyclerController.FindByRecyclerId(ctx))
+	})
+
+	r.GET("/recyclers/location/:lat/:long", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, recyclerController.FindByLocation(ctx))
 	})
 
 	r.POST("/recyclers", func(ctx *gin.Context) {
