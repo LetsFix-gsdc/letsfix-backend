@@ -10,7 +10,8 @@ type OwnershipService interface {
 	//UpdateDevice(models.Device)
 	//DeleteDevice(models.Device)
 	FindAllOwnerships() []models.Ownership
-	FindOwnershipByUserId(string) models.Ownership
+	FindOwnershipByUserId(string) []models.Ownership
+	FindDevicesByUserId(string) []models.Device
 }
 
 type ownershipService struct {
@@ -32,6 +33,10 @@ func (service *ownershipService) FindAllOwnerships() []models.Ownership {
 	return service.ownershipRepository.FindAllOwnerships()
 }
 
-func (service *ownershipService) FindOwnershipByUserId(user_id string) models.Ownership {
+func (service *ownershipService) FindOwnershipByUserId(user_id string) []models.Ownership {
 	return service.ownershipRepository.FindOwnershipByUserId(user_id)
+}
+
+func (service *ownershipService) FindDevicesByUserId(user_id string) []models.Device {
+	return service.ownershipRepository.FindDevicesByUserId(user_id)
 }

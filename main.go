@@ -30,6 +30,15 @@ var (
 	brandRepository repository.BrandRepository = repository.NewBrandRepository()
 	brandService service.BrandService = service.NewBrandService(brandRepository)
 	brandController controllers.BrandController = controllers.NewBrandController(brandService)
+
+	recyclerRepository repository.RecyclerRepository = repository.NewRecyclerRepository()
+	recyclerService service.RecyclerService = service.NewRecyclerService(recyclerRepository)
+	recyclerController controllers.RecyclerController = controllers.NewRecyclerController(recyclerService)
+
+	repairerRepository repository.RepairerRepository = repository.NewRepairerRepository()
+	repairerService service.RepairerService = service.NewRepairerService(repairerRepository)
+	repairerController controllers.RepairerController = controllers.NewRepairerController(repairerService)
+
 )
 
 func main() {
@@ -58,7 +67,7 @@ func main() {
 		}
 	})
 	
-	r.GET("users/:id", func(ctx *gin.Context) {
+	r.GET("/users/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, userController.FindByUserId(ctx))
 	})
 
@@ -95,8 +104,12 @@ func main() {
 		ctx.JSON(http.StatusOK, ownershipController.FindAllOwnerships())
 	})
 
-	r.GET("ownerships/:id", func(ctx *gin.Context) {
+	r.GET("/ownerships/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, ownershipController.FindOwnershipByUserId(ctx))
+	})
+
+	r.GET("/ownerships/devices/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, ownershipController.FindDevicesByUserId(ctx))
 	})
 
 	r.POST("/ownerships", func(ctx *gin.Context) {
@@ -113,7 +126,7 @@ func main() {
 		ctx.JSON(http.StatusOK, typeController.FindAllTypes())
 	})
 
-	r.GET("types/:id", func(ctx *gin.Context) {
+	r.GET("/types/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, typeController.FindByTypeId(ctx))
 	})
 
@@ -131,7 +144,7 @@ func main() {
 		ctx.JSON(http.StatusOK, brandController.FindAllBrands())
 	})
 
-	r.GET("brands/:id", func(ctx *gin.Context) {
+	r.GET("/brands/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, brandController.FindByBrandId(ctx))
 	})
 
@@ -144,12 +157,42 @@ func main() {
 		}
 	})
 
-	
+	// Recycler CRUD
+	r.GET("/recyclers", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, recyclerController.FindAllRecyclers())
+	})
 
+	r.GET("/recyclers/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, recyclerController.FindByRecyclerId(ctx))
+	})
 
+	r.POST("/recyclers", func(ctx *gin.Context) {
+		err := recyclerController.SaveRecycler(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
 
-	
-	
+	// Repairer CRUD
+	r.GET("/repairers", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, repairerController.FindAllRepairers())
+	})
+
+	r.GET("/repairers/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, repairerController.FindByRepairerId(ctx))
+	})
+
+	r.POST("/repairers", func(ctx *gin.Context) {
+		err := repairerController.SaveRepairer(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
+
 
 	r.Run()
 }

@@ -8,7 +8,7 @@ type OwnershipRepository interface {
 	//DeleteOwnership(models.Ownership)
 	FindAllOwnerships() []models.Ownership
 	//FindDeviceByUserId()
-	FindOwnershipByUserId(string) models.Ownership
+	FindOwnershipByUserId(string) []models.Ownership
 	FindDevicesByUserId(string) []models.Device
 	//CloseDB()
 }
@@ -35,16 +35,29 @@ func (db *database) FindAllOwnerships() []models.Ownership {
 	return ownerships
 }
 
-func (db *database) FindOwnershipByUserId(user_id string) models.Ownership {
-	var owner models.Ownership
-	DB.Set("gorm:auto_preload", true).Find(&owner, user_id)
-	return owner
+func (db *database) FindOwnershipByUserId(user_id string) []models.Ownership {
+	var ownerships []models.Ownership
+	var o []models.Ownership
+	DB.Set("gorm:auto_preload", true).Find(&ownerships)
+	for i := 0; i < len(ownerships); i++ {
+		if d := ownerships[i].Owner.ID; d == user_id {
+			o = append(o, ownerships[i])
+		}
+	}
+
+	return o
 }
 
 func (db *database) FindDevicesByUserId(user_id string) []models.Device {
-	var owner models.Ownership
-	var device []models.Device
-	DB.Set("gorm:auto_preload", true).Find(&owner, "id=?", user_id)
-	DB.Set("gorm:auto_preload", true).Find(&device, "id=?", owner.ID)
-	return device
+	var ownerships []models.Ownership
+	var allDevices []models.Device
+
+	DB.Set("gorm:auto_preload", true).Find(&ownerships)
+	for i := 0; i < len(ownerships); i++ {
+		if d := ownerships[i].Owner.ID; d == user_id {
+			allDevices = append(allDevices, ownerships[i].Device)
+		}
+	}
+	return allDevices
+		
 }
