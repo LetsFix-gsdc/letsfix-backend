@@ -43,17 +43,14 @@ var (
 	rctypeService service.RctypeService = service.NewRctypeService(rctypeRepository)
 	rctypeController controllers.RctypeController = controllers.NewRctypeController(rctypeService)
 
+	rptypeRepository repository.RptypeRepository = repository.NewRptypeRepository()
+	rptypeService service.RptypeService = service.NewRptypeService(rptypeRepository)
+	rptypeController controllers.RptypeController = controllers.NewRptypeController(rptypeService)
+
 )
 
 func main() {
 	r := gin.Default()
-	//models.ConnectDatabase()
-	
-	/*
-	r.GET("/users", controllers.FindUsers)
-	r.POST("/users", controllers.CreateUser)
-	r.GET("/users/:user_id/devices", controllers.FindDevices)
-	*/
 
 	repository.DatabaseConnect()
 
@@ -212,6 +209,40 @@ func main() {
 
 	r.POST("/recyclertypes", func(ctx *gin.Context) {
 		err := rctypeController.SaveRctype(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
+
+	// Repairer type CRUD
+	r.GET("/repairertypes", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindAllRptypes())
+	})
+
+	r.GET("/repairertypes/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindRptypeById(ctx))
+	})
+
+	r.GET("/repairertypes/repairers/:repairer", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindRptypeByRepairer(ctx))
+	})
+
+	r.GET("/repairertypes/types/:type_name", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindRptypeByType(ctx))
+	})
+
+	r.GET("/repairertypes/brands/:brand_name", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindRptypeByBrand(ctx))
+	})
+
+	r.GET("/repairertypes/components/:component", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rptypeController.FindRptypeByComponent(ctx))
+	})
+
+	r.POST("/repairertypes", func(ctx *gin.Context) {
+		err := rptypeController.SaveRptype(ctx)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		} else {
