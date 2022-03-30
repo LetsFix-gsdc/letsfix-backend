@@ -2,6 +2,9 @@ package main
 
 import (
 	"gsdc/letsfix/controllers"
+	"gsdc/letsfix/seed"
+	"os"
+
 	//"gsdc/letsfix/models"
 	"gsdc/letsfix/repository"
 	"gsdc/letsfix/service"
@@ -11,51 +14,54 @@ import (
 )
 
 var (
-	userRepository repository.UserRepository = repository.NewUserRepository()
-	userService service.UserService = service.New(userRepository)
+	userRepository repository.UserRepository  = repository.NewUserRepository()
+	userService    service.UserService        = service.New(userRepository)
 	userController controllers.UserController = controllers.New(userService)
 
-	deviceRepository repository.DeviceRepository = repository.NewDeviceRepository()
-	deviceService service.DeviceService = service.NewDeviceService(deviceRepository)
+	deviceRepository repository.DeviceRepository  = repository.NewDeviceRepository()
+	deviceService    service.DeviceService        = service.NewDeviceService(deviceRepository)
 	deviceController controllers.DeviceController = controllers.NewDeviceController(deviceService)
 
-	ownershipRepository repository.OwnershipRepository = repository.NewOwnershipRepository()
-	ownershipService service.OwnershipService = service.NewOwnershipService(ownershipRepository)
+	ownershipRepository repository.OwnershipRepository  = repository.NewOwnershipRepository()
+	ownershipService    service.OwnershipService        = service.NewOwnershipService(ownershipRepository)
 	ownershipController controllers.OwnershipController = controllers.NewOwnershipController(ownershipService)
 
-	typeRepository repository.TypeRepository = repository.NewTypeRepository()
-	typeService service.TypeService = service.NewTypeService(typeRepository)
+	typeRepository repository.TypeRepository  = repository.NewTypeRepository()
+	typeService    service.TypeService        = service.NewTypeService(typeRepository)
 	typeController controllers.TypeController = controllers.NewTypeController(typeService)
 
-	brandRepository repository.BrandRepository = repository.NewBrandRepository()
-	brandService service.BrandService = service.NewBrandService(brandRepository)
+	brandRepository repository.BrandRepository  = repository.NewBrandRepository()
+	brandService    service.BrandService        = service.NewBrandService(brandRepository)
 	brandController controllers.BrandController = controllers.NewBrandController(brandService)
 
-	recyclerRepository repository.RecyclerRepository = repository.NewRecyclerRepository()
-	recyclerService service.RecyclerService = service.NewRecyclerService(recyclerRepository)
+	recyclerRepository repository.RecyclerRepository  = repository.NewRecyclerRepository()
+	recyclerService    service.RecyclerService        = service.NewRecyclerService(recyclerRepository)
 	recyclerController controllers.RecyclerController = controllers.NewRecyclerController(recyclerService)
 
-	repairerRepository repository.RepairerRepository = repository.NewRepairerRepository()
-	repairerService service.RepairerService = service.NewRepairerService(repairerRepository)
+	repairerRepository repository.RepairerRepository  = repository.NewRepairerRepository()
+	repairerService    service.RepairerService        = service.NewRepairerService(repairerRepository)
 	repairerController controllers.RepairerController = controllers.NewRepairerController(repairerService)
 
-	rctypeRepository repository.RctypeRepository = repository.NewRctypeRepository()
-	rctypeService service.RctypeService = service.NewRctypeService(rctypeRepository)
+	rctypeRepository repository.RctypeRepository  = repository.NewRctypeRepository()
+	rctypeService    service.RctypeService        = service.NewRctypeService(rctypeRepository)
 	rctypeController controllers.RctypeController = controllers.NewRctypeController(rctypeService)
-
 )
 
 func main() {
 	r := gin.Default()
 	//models.ConnectDatabase()
-	
+
 	/*
-	r.GET("/users", controllers.FindUsers)
-	r.POST("/users", controllers.CreateUser)
-	r.GET("/users/:user_id/devices", controllers.FindDevices)
+		r.GET("/users", controllers.FindUsers)
+		r.POST("/users", controllers.CreateUser)
+		r.GET("/users/:user_id/devices", controllers.FindDevices)
 	*/
 
 	repository.DatabaseConnect()
+
+	if os.Args[1] == "seed" {
+		seed.SeedFromXml("recycler-data.kml")
+	}
 
 	// Users CRUD
 	r.GET("/users", func(ctx *gin.Context) {
@@ -70,7 +76,7 @@ func main() {
 			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
 		}
 	})
-	
+
 	r.GET("/users/:id", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, userController.FindByUserId(ctx))
 	})
@@ -123,7 +129,7 @@ func main() {
 		} else {
 			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
 		}
-	})	
+	})
 
 	// Type CRUD
 	r.GET("/types", func(ctx *gin.Context) {
