@@ -39,6 +39,10 @@ var (
 	repairerService service.RepairerService = service.NewRepairerService(repairerRepository)
 	repairerController controllers.RepairerController = controllers.NewRepairerController(repairerService)
 
+	rctypeRepository repository.RctypeRepository = repository.NewRctypeRepository()
+	rctypeService service.RctypeService = service.NewRctypeService(rctypeRepository)
+	rctypeController controllers.RctypeController = controllers.NewRctypeController(rctypeService)
+
 )
 
 func main() {
@@ -193,6 +197,27 @@ func main() {
 		}
 	})
 
+	// Recycler type CRUD
+	r.GET("/recyclertypes", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rctypeController.FindAllRctypes())
+	})
+
+	r.GET("/recyclertypes/:id", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rctypeController.FindRctypeById(ctx))
+	})
+
+	r.GET("/recyclertypes/types/:type_name", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, rctypeController.FindRctypeByType(ctx))
+	})
+
+	r.POST("/recyclertypes", func(ctx *gin.Context) {
+		err := rctypeController.SaveRctype(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"message": "User Input is Valid!"})
+		}
+	})
 
 	r.Run()
 }
