@@ -13,7 +13,6 @@ type OwnershipRepository interface {
 	//CloseDB()
 }
 
-
 func NewOwnershipRepository() OwnershipRepository {
 	return &database{
 		connection: DB,
@@ -23,7 +22,6 @@ func NewOwnershipRepository() OwnershipRepository {
 func (db *database) SaveOwnership(ownership models.Ownership) {
 	DB.Create(&ownership)
 }
-
 
 func (db *database) FindAllOwnerships() []models.Ownership {
 	var ownerships []models.Ownership
@@ -40,7 +38,7 @@ func (db *database) FindOwnershipByUserId(user_id string) []models.Ownership {
 	var o []models.Ownership
 	DB.Set("gorm:auto_preload", true).Find(&ownerships)
 	for i := 0; i < len(ownerships); i++ {
-		if d := ownerships[i].Owner.ID; d == user_id {
+		if d := ownerships[i].UserID; d == user_id {
 			o = append(o, ownerships[i])
 		}
 	}
@@ -59,5 +57,5 @@ func (db *database) FindDevicesByUserId(user_id string) []models.Device {
 		}
 	}
 	return allDevices
-		
+
 }
