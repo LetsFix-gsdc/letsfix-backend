@@ -11,7 +11,7 @@ type OwnershipService interface {
 	//DeleteDevice(models.Device)
 	FindAllOwnerships() []models.Ownership
 	FindOwnershipByUserId(string) []models.Ownership
-	FindDevicesByUserId(string) []models.Device
+	FindDevicesByUserId(string) []models.Ownership
 }
 
 type ownershipService struct {
@@ -21,7 +21,7 @@ type ownershipService struct {
 func NewOwnershipService(repo repository.OwnershipRepository) OwnershipService {
 	return &ownershipService{
 		ownershipRepository: repo,
-	} 
+	}
 }
 
 func (service *ownershipService) SaveOwnership(ownership models.Ownership) models.Ownership {
@@ -37,6 +37,6 @@ func (service *ownershipService) FindOwnershipByUserId(user_id string) []models.
 	return service.ownershipRepository.FindOwnershipByUserId(user_id)
 }
 
-func (service *ownershipService) FindDevicesByUserId(user_id string) []models.Device {
+func (service *ownershipService) FindDevicesByUserId(user_id string) []models.Ownership {
 	return service.ownershipRepository.FindDevicesByUserId(user_id)
 }

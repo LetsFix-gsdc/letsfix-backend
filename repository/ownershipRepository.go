@@ -9,7 +9,7 @@ type OwnershipRepository interface {
 	FindAllOwnerships() []models.Ownership
 	//FindDeviceByUserId()
 	FindOwnershipByUserId(string) []models.Ownership
-	FindDevicesByUserId(string) []models.Device
+	FindDevicesByUserId(string) []models.Ownership
 	//CloseDB()
 }
 
@@ -46,16 +46,16 @@ func (db *database) FindOwnershipByUserId(user_id string) []models.Ownership {
 	return o
 }
 
-func (db *database) FindDevicesByUserId(user_id string) []models.Device {
-	var ownerships []models.Ownership
-	var allDevices []models.Device
+func (db *database) FindDevicesByUserId(user_id string) []models.Ownership {
+	var allOwnerships []models.Ownership
+	var res []models.Ownership
 
-	DB.Set("gorm:auto_preload", true).Find(&ownerships)
-	for i := 0; i < len(ownerships); i++ {
-		if d := ownerships[i].Owner.ID; d == user_id {
-			allDevices = append(allDevices, ownerships[i].Device)
+	DB.Set("gorm:auto_preload", true).Find(&allOwnerships)
+	for i := 0; i < len(allOwnerships); i++ {
+		if d := allOwnerships[i].UserID; d == user_id {
+			res = append(res, allOwnerships[i])
 		}
 	}
-	return allDevices
+	return res
 
 }

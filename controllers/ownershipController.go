@@ -17,22 +17,21 @@ type OwnershipController interface {
 	//UpdateDevice(ctx *gin.Context) error
 	//DeleteDevice(ctx *gin.Context) error
 	FindOwnershipByUserId(ctx *gin.Context) []models.Ownership
-	FindDevicesByUserId(ctx *gin.Context) []models.Device
-	
+	FindDevicesByUserId(ctx *gin.Context) []models.Ownership
 }
 
 type ownershipController struct {
 	service service.OwnershipService
 }
 
-func NewOwnershipController(service service.OwnershipService) OwnershipController{
-	return &ownershipController {
+func NewOwnershipController(service service.OwnershipService) OwnershipController {
+	return &ownershipController{
 		service: service,
 	}
 }
 
 func (c *ownershipController) FindAllOwnerships() []models.Ownership {
-	return c.service.FindAllOwnerships() 
+	return c.service.FindAllOwnerships()
 }
 
 func (c *ownershipController) SaveOwnership(ctx *gin.Context) error {
@@ -50,8 +49,7 @@ func (c *ownershipController) FindOwnershipByUserId(ctx *gin.Context) []models.O
 	return c.service.FindOwnershipByUserId(user_id)
 }
 
-func (c *ownershipController) FindDevicesByUserId(ctx *gin.Context) []models.Device {
+func (c *ownershipController) FindDevicesByUserId(ctx *gin.Context) []models.Ownership {
 	user_id := ctx.Param("id")
 	return c.service.FindDevicesByUserId(user_id)
 }
-
