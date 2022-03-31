@@ -176,7 +176,7 @@ func main() {
 		ctx.JSON(http.StatusOK, recyclerController.FindByRecyclerId(ctx))
 	})
 
-	r.GET("/recyclers/location/:lat/:long", func(ctx *gin.Context) {
+	r.GET("/recyclers/location/:long/:lat", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, recyclerController.FindByLocation(ctx))
 	})
 
