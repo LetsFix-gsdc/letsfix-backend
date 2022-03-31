@@ -7,6 +7,7 @@ type Ownership struct {
 	UserID         string    `json:"user_id,omitempty"`
 	DeviceID       uint      `json:"device_id,omitempty"`
 	DeviceName     string    `json:"device_name,omitempty"`
+	DeviceType     string    `json:"device_type,omitempty""`
 	DeviceBrand    string    `json:"device_brand,omitempty"`
 	SerialNumber   string    `json:"serial_number,omitempty"`
 	PurchaseDate   time.Time `json:"purchase_date,omitempty"`
