@@ -69,6 +69,7 @@ func CalculateDistance(x1 float64, x2 float64, y1 float64, y2 float64) float64 {
 }
 
 func (c *recyclerController) FindByLocation(ctx *gin.Context) []models.Recycler {
+	const RESULT_LIMIT int = 25
 	lat, _ := strconv.ParseFloat(ctx.Param("lat"), 64)
 	long, _ := strconv.ParseFloat(ctx.Param("long"), 64)
 
@@ -93,5 +94,5 @@ func (c *recyclerController) FindByLocation(ctx *gin.Context) []models.Recycler 
 		res = append(res, r.Recycler)
 	}
 
-	return res
+	return res[:RESULT_LIMIT]
 }
