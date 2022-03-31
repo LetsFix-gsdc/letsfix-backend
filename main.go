@@ -10,6 +10,8 @@ import (
 	"gsdc/letsfix/service"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -46,14 +48,14 @@ var (
 	rctypeService    service.RctypeService        = service.NewRctypeService(rctypeRepository)
 	rctypeController controllers.RctypeController = controllers.NewRctypeController(rctypeService)
 
-	rptypeRepository repository.RptypeRepository = repository.NewRptypeRepository()
-	rptypeService service.RptypeService = service.NewRptypeService(rptypeRepository)
+	rptypeRepository repository.RptypeRepository  = repository.NewRptypeRepository()
+	rptypeService    service.RptypeService        = service.NewRptypeService(rptypeRepository)
 	rptypeController controllers.RptypeController = controllers.NewRptypeController(rptypeService)
-
 )
 
 func main() {
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	repository.DatabaseConnect()
 
